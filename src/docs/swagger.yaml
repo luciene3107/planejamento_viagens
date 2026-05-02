@@ -8,6 +8,7 @@ servers:
 tags:
   - name: Health
   - name: Heuristicas
+  - name: Usuarios
   - name: Auth
 paths:
   /api/health:
@@ -34,6 +35,10 @@ paths:
       summary: Cadastrar heuristica de viagem
       security:
         - bearerAuth: []
+  /api/usuarios:
+    post:
+      tags: [Usuarios]
+      summary: Registrar novo usuario
       requestBody:
         required: true
         content:
@@ -53,6 +58,18 @@ paths:
           description: Autenticacao obrigatoria
         "409":
           description: Nome da heuristica duplicado para o usuario
+              $ref: "#/components/schemas/RegisterRequest"
+      responses:
+        "201":
+          description: Usuario criado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserCreatedResponse"
+        "400":
+          description: Dados obrigatorios ausentes ou senha fora do criterio minimo
+        "409":
+          description: Email ja utilizado
   /api/auth/register:
     post:
       tags: [Auth]
@@ -139,6 +156,10 @@ components:
       type: object
       properties:
         heuristica:
+    UserCreatedResponse:
+      type: object
+      properties:
+        user:
           type: object
           properties:
             id:
@@ -156,6 +177,13 @@ components:
             usuario:
               type: string
               example: "507f1f77bcf86cd799439011"
+            name:
+              type: string
+              example: Luciene
+            email:
+              type: string
+              format: email
+              example: luciene@email.com
     AuthResponse:
       type: object
       properties:
