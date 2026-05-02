@@ -7,6 +7,7 @@ servers:
   - url: http://localhost:3000
 tags:
   - name: Health
+  - name: Heuristicas
   - name: Auth
 paths:
   /api/health:
@@ -27,6 +28,31 @@ paths:
           description: Token válido
         "401":
           description: Token inválido ou ausente
+  /api/heuristicas:
+    post:
+      tags: [Heuristicas]
+      summary: Cadastrar heuristica de viagem
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateHeuristicaRequest"
+      responses:
+        "201":
+          description: Heuristica criada com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HeuristicaResponse"
+        "400":
+          description: Dados invalidos
+        "401":
+          description: Autenticacao obrigatoria
+        "409":
+          description: Nome da heuristica duplicado para o usuario
   /api/auth/register:
     post:
       tags: [Auth]
@@ -99,6 +125,37 @@ components:
           type: string
           format: password
           example: "123456"
+    CreateHeuristicaRequest:
+      type: object
+      required: [nome, descricao]
+      properties:
+        nome:
+          type: string
+          example: Menor custo
+        descricao:
+          type: string
+          example: Prioriza opcoes com menor custo total.
+    HeuristicaResponse:
+      type: object
+      properties:
+        heuristica:
+          type: object
+          properties:
+            id:
+              type: string
+              example: "6814f42db637f17f43549a76"
+            nome:
+              type: string
+              example: Menor custo
+            descricao:
+              type: string
+              example: Prioriza opcoes com menor custo total.
+            status:
+              type: string
+              example: ativa
+            usuario:
+              type: string
+              example: "507f1f77bcf86cd799439011"
     AuthResponse:
       type: object
       properties:
