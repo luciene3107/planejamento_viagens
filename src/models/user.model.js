@@ -18,11 +18,7 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
       minlength: 6,
-    },
-    isActive: {
-      type: Boolean,
-      default: true,
-      required: true,
+      minlength: 8,
     },
   },
   {

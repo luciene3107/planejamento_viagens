@@ -1,6 +1,8 @@
 const express = require("express");
 
 const authRoutes = require("./auth.routes");
+const heuristicasRoutes = require("./heuristicas.routes");
+const usuariosRoutes = require("./usuarios.routes");
 const authMiddleware = require("../middleware/auth.middleware");
 
 const router = express.Router();
@@ -21,5 +23,7 @@ router.get("/protected/health", authMiddleware, (req, res) => {
 });
 
 router.use("/auth", authRoutes);
+router.use("/heuristicas", heuristicasRoutes);
+router.use("/usuarios", usuariosRoutes);
 
 module.exports = router;

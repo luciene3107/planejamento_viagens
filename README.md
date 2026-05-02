@@ -71,8 +71,10 @@ Copy-Item .env.example .env
 
 - `GET /api/health` - status público da API
 - `GET /api/protected/health` - status protegido (exige Bearer token)
+- `POST /api/heuristicas` - cadastra heuristica de viagem para usuario autenticado
+- `POST /api/usuarios` - registra novo usuario com senha segura
 - `POST /api/auth/register` - cria usuário e retorna JWT
-- `POST /api/auth/login` - autentica usuário ativo e retorna JWT com expiração
+- `POST /api/auth/login` - autentica usuário e retorna JWT
 
 ## Swagger
 
