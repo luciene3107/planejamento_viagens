@@ -7,6 +7,7 @@ servers:
   - url: http://localhost:3000
 tags:
   - name: Health
+  - name: Heuristicas
   - name: Auth
 paths:
   /api/health:
@@ -27,6 +28,30 @@ paths:
           description: Token válido
         "401":
           description: Token inválido ou ausente
+  /api/heuristicas/{id}:
+    get:
+      tags: [Heuristicas]
+      summary: Consultar heuristica por id
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          example: "6814f42db637f17f43549a76"
+      responses:
+        "200":
+          description: Heuristica encontrada
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HeuristicaResponse"
+        "401":
+          description: Autenticacao obrigatoria
+        "404":
+          description: Heuristica nao encontrada
   /api/auth/register:
     post:
       tags: [Auth]
@@ -99,6 +124,28 @@ components:
           type: string
           format: password
           example: "123456"
+    HeuristicaResponse:
+      type: object
+      properties:
+        heuristica:
+          type: object
+          properties:
+            id:
+              type: string
+              example: "6814f42db637f17f43549a76"
+            nome:
+              type: string
+              example: Menor custo
+            descricao:
+              type: string
+              example: Prioriza opcoes com menor custo total.
+            status:
+              type: string
+              example: inativa
+            createdAt:
+              type: string
+              format: date-time
+              example: "2026-05-02T10:00:00.000Z"
     AuthResponse:
       type: object
       properties:
