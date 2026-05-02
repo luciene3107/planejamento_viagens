@@ -65,6 +65,8 @@ paths:
                 $ref: "#/components/schemas/AuthResponse"
         "401":
           description: Credenciais inválidas
+        "403":
+          description: Usuário inativo
 components:
   securitySchemes:
     bearerAuth:
@@ -105,6 +107,9 @@ components:
         token:
           type: string
           example: eyJhbGciOi...
+        expiresIn:
+          type: string
+          example: 1d
         user:
           type: object
           properties:

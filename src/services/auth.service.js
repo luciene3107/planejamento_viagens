@@ -35,11 +35,18 @@ const register = async ({ name, email, password }) => {
 };
 
 const login = async ({ email, password }) => {
+  const env = getEnv();
   const user = await User.findOne({ email });
 
   if (!user) {
     const error = new Error("Invalid credentials.");
     error.status = 401;
+    throw error;
+  }
+
+  if (!user.isActive) {
+    const error = new Error("User cannot authenticate.");
+    error.status = 403;
     throw error;
   }
 
@@ -55,6 +62,7 @@ const login = async ({ email, password }) => {
 
   return {
     token,
+    expiresIn: env.jwtExpiresIn,
     user: {
       id: user._id,
       name: user.name,

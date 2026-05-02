@@ -72,7 +72,14 @@ Copy-Item .env.example .env
 - `GET /api/health` - status público da API
 - `GET /api/protected/health` - status protegido (exige Bearer token)
 - `POST /api/auth/register` - cria usuário e retorna JWT
-- `POST /api/auth/login` - autentica usuário e retorna JWT
+- `POST /api/auth/login` - autentica usuário ativo e retorna JWT + expiração
+
+### Regras de login em `POST /api/auth/login`
+
+- login feito com `email` e `password`
+- credenciais inválidas retornam `401` sem detalhar o campo incorreto
+- usuário inativo retorna `403`
+- em sucesso, resposta inclui `token` e `expiresIn`
 
 ## Swagger
 
