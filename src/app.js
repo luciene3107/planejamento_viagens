@@ -6,8 +6,12 @@ const path = require("path");
 
 const routes = require("./routes");
 const { errorHandler } = require("./middleware/error.middleware");
+const getEnv = require("./config/env");
 
 const swaggerDocument = YAML.load(path.join(__dirname, "docs", "swagger.yaml"));
+const env = getEnv();
+
+swaggerDocument.servers = [{ url: env.baseUrl }];
 
 const app = express();
 

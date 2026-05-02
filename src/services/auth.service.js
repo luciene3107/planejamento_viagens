@@ -2,16 +2,12 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
 const User = require("../models/user.model");
+const getEnv = require("../config/env");
 
 const buildToken = (userId) => {
-  const secret = process.env.JWT_SECRET;
-  const expiresIn = process.env.JWT_EXPIRES_IN || "1d";
+  const env = getEnv();
 
-  if (!secret) {
-    throw new Error("JWT_SECRET is not defined in environment variables.");
-  }
-
-  return jwt.sign({ sub: userId }, secret, { expiresIn });
+  return jwt.sign({ sub: userId }, env.jwtSecret, { expiresIn: env.jwtExpiresIn });
 };
 
 const register = async ({ name, email, password }) => {
