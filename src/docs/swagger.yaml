@@ -7,6 +7,7 @@ servers:
   - url: http://localhost:3000
 tags:
   - name: Health
+  - name: Users
   - name: Auth
 paths:
   /api/health:
@@ -27,6 +28,35 @@ paths:
           description: Token válido
         "401":
           description: Token inválido ou ausente
+  /api/usuarios:
+    post:
+      tags: [Users]
+      summary: Registrar novo usuário (SCRUM-5)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserCreateRequest"
+      responses:
+        "201":
+          description: Usuário criado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserCreateResponse"
+        "400":
+          description: Dados inválidos
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "409":
+          description: Email já utilizado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
   /api/auth/register:
     post:
       tags: [Auth]
@@ -72,6 +102,33 @@ components:
       scheme: bearer
       bearerFormat: JWT
   schemas:
+    UserCreateRequest:
+      type: object
+      required: [name, email, password]
+      properties:
+        name:
+          type: string
+          example: Ana Souza
+        email:
+          type: string
+          format: email
+          example: ana@exemplo.com
+        password:
+          type: string
+          format: password
+          example: "abc12345"
+    UserCreateResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          example: "6814f42db637f17f43549a76"
+    ErrorResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Email already in use.
     RegisterRequest:
       type: object
       required: [name, email, password]

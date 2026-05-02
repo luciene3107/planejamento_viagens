@@ -66,13 +66,23 @@ Copy-Item .env.example .env
 
 - `npm start`: inicia o servidor em modo estático
 - `npm run start:dev`: inicia com reinício automático ao alterar arquivos
+- `npm test`: executa os testes unitários
 
 ## Endpoints iniciais
 
 - `GET /api/health` - status público da API
 - `GET /api/protected/health` - status protegido (exige Bearer token)
+- `POST /api/usuarios` - registra usuário (retorna apenas `id`)
 - `POST /api/auth/register` - cria usuário e retorna JWT
 - `POST /api/auth/login` - autentica usuário e retorna JWT
+
+### Regras de registro em `POST /api/usuarios`
+
+- `name` e `email` são obrigatórios
+- senha deve ter no mínimo 8 caracteres e ao menos 1 número
+- e-mail deve ser único
+- senha é persistida com hash seguro (`bcrypt`)
+- em duplicidade de e-mail, API retorna `409`
 
 ## Swagger
 
