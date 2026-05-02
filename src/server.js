@@ -2,15 +2,15 @@ require("dotenv").config();
 
 const app = require("./app");
 const connectDatabase = require("./config/database");
-
-const PORT = process.env.PORT || 3000;
+const getEnv = require("./config/env");
 
 const startServer = async () => {
   try {
+    const env = getEnv();
     await connectDatabase();
-    app.listen(PORT, () => {
+    app.listen(env.port, () => {
       // eslint-disable-next-line no-console
-      console.log(`Server running on port ${PORT}`);
+      console.log(`Server running on port ${env.port}`);
     });
   } catch (error) {
     // eslint-disable-next-line no-console

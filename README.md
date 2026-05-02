@@ -23,6 +23,10 @@ src/
   services/
 ```
 
+Arquivo de configuração de ambiente:
+
+- `src/config/env.js`
+
 ## Pré-requisitos
 
 - Node.js 20+
@@ -38,8 +42,16 @@ npm install
 
 2. Crie o arquivo `.env` com base no `.env.example`:
 
+Linux/macOS:
+
 ```bash
 cp .env.example .env
+```
+
+Windows PowerShell:
+
+```powershell
+Copy-Item .env.example .env
 ```
 
 3. Atualize as variáveis conforme o ambiente:
@@ -71,3 +83,7 @@ Com a API rodando, acesse:
 Especificação OpenAPI:
 
 - `src/docs/swagger.yaml`
+
+## Deploy (Vercel)
+
+O projeto já inclui o arquivo `vercel.json` para facilitar o deploy inicial.
