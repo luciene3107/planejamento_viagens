@@ -8,6 +8,7 @@ servers:
 tags:
   - name: Health
   - name: Heuristicas
+  - name: Usuarios
   - name: Auth
 paths:
   /api/health:
@@ -44,14 +45,47 @@ paths:
       responses:
         "200":
           description: Heuristica encontrada
+  /api/heuristicas:
+    post:
+      tags: [Heuristicas]
+      summary: Cadastrar heuristica de viagem
+      security:
+        - bearerAuth: []
+  /api/usuarios:
+    post:
+      tags: [Usuarios]
+      summary: Registrar novo usuario
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateHeuristicaRequest"
+      responses:
+        "201":
+          description: Heuristica criada com sucesso
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/HeuristicaResponse"
+        "400":
+          description: Dados invalidos
         "401":
           description: Autenticacao obrigatoria
-        "404":
-          description: Heuristica nao encontrada
+        "409":
+          description: Nome da heuristica duplicado para o usuario
+              $ref: "#/components/schemas/RegisterRequest"
+      responses:
+        "201":
+          description: Usuario criado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserCreatedResponse"
+        "400":
+          description: Dados obrigatorios ausentes ou senha fora do criterio minimo
+        "409":
+          description: Email ja utilizado
   /api/auth/register:
     post:
       tags: [Auth]
@@ -124,10 +158,24 @@ components:
           type: string
           format: password
           example: "123456"
+    CreateHeuristicaRequest:
+      type: object
+      required: [nome, descricao]
+      properties:
+        nome:
+          type: string
+          example: Menor custo
+        descricao:
+          type: string
+          example: Prioriza opcoes com menor custo total.
     HeuristicaResponse:
       type: object
       properties:
         heuristica:
+    UserCreatedResponse:
+      type: object
+      properties:
+        user:
           type: object
           properties:
             id:
@@ -141,11 +189,17 @@ components:
               example: Prioriza opcoes com menor custo total.
             status:
               type: string
-              example: inativa
-            createdAt:
+              example: ativa
+            usuario:
               type: string
-              format: date-time
-              example: "2026-05-02T10:00:00.000Z"
+              example: "507f1f77bcf86cd799439011"
+            name:
+              type: string
+              example: Luciene
+            email:
+              type: string
+              format: email
+              example: luciene@email.com
     AuthResponse:
       type: object
       properties:

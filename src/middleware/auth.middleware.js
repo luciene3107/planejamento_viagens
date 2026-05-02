@@ -6,6 +6,7 @@ const authMiddleware = (req, res, next) => {
 
   if (!authHeader || !authHeader.startsWith("Bearer ")) {
     return res.status(401).json({ message: "Authentication is required." });
+    return res.status(401).json({ message: "Unauthorized." });
   }
 
   const token = authHeader.replace("Bearer ", "").trim();

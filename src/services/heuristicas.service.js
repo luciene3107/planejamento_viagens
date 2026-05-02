@@ -1,39 +1,45 @@
-const mongoose = require("mongoose");
-
 const Heuristica = require("../models/heuristica.model");
 
-const NOT_FOUND_MESSAGE = "Heuristica not found.";
+const REQUIRED_FIELDS_MESSAGE = "nome and descricao are required.";
+const DUPLICATE_NAME_MESSAGE = "Heuristica name already in use for this user.";
 
-const mapHeuristica = (heuristica) => ({
-  id: heuristica._id,
-  nome: heuristica.nome,
-  descricao: heuristica.descricao,
-  status: heuristica.status,
-  createdAt: heuristica.createdAt,
-});
+const validateRequiredFields = ({ nome, descricao }) => {
+  if (!nome || !descricao) {
+    const error = new Error(REQUIRED_FIELDS_MESSAGE);
+    error.status = 400;
+    throw error;
+  }
+};
 
-const getHeuristicaById = async ({ id, usuarioId }) => {
-  if (!mongoose.Types.ObjectId.isValid(id)) {
-    const error = new Error(NOT_FOUND_MESSAGE);
-    error.status = 404;
+const createHeuristica = async ({ nome, descricao, usuarioId }) => {
+  validateRequiredFields({ nome, descricao });
+
+  const existingHeuristica = await Heuristica.findOne({ usuario: usuarioId, nome });
+
+  if (existingHeuristica) {
+    const error = new Error(DUPLICATE_NAME_MESSAGE);
+    error.status = 409;
     throw error;
   }
 
-  const heuristica = await Heuristica.findOne({
-    _id: id,
+  const heuristica = await Heuristica.create({
+    nome,
+    descricao,
+    status: "ativa",
     usuario: usuarioId,
   });
 
-  if (!heuristica) {
-    const error = new Error(NOT_FOUND_MESSAGE);
-    error.status = 404;
-    throw error;
-  }
-
-  return mapHeuristica(heuristica);
+  return {
+    id: heuristica._id,
+    nome: heuristica.nome,
+    descricao: heuristica.descricao,
+    status: heuristica.status,
+    usuario: heuristica.usuario,
+  };
 };
 
 module.exports = {
-  NOT_FOUND_MESSAGE,
-  getHeuristicaById,
+  DUPLICATE_NAME_MESSAGE,
+  REQUIRED_FIELDS_MESSAGE,
+  createHeuristica,
 };
