@@ -7,6 +7,7 @@ servers:
   - url: http://localhost:3000
 tags:
   - name: Health
+  - name: Usuarios
   - name: Auth
 paths:
   /api/health:
@@ -27,6 +28,27 @@ paths:
           description: Token válido
         "401":
           description: Token inválido ou ausente
+  /api/usuarios:
+    post:
+      tags: [Usuarios]
+      summary: Registrar novo usuario
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RegisterRequest"
+      responses:
+        "201":
+          description: Usuario criado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserCreatedResponse"
+        "400":
+          description: Dados obrigatorios ausentes ou senha fora do criterio minimo
+        "409":
+          description: Email ja utilizado
   /api/auth/register:
     post:
       tags: [Auth]
@@ -99,6 +121,22 @@ components:
           type: string
           format: password
           example: "123456"
+    UserCreatedResponse:
+      type: object
+      properties:
+        user:
+          type: object
+          properties:
+            id:
+              type: string
+              example: "6814f42db637f17f43549a76"
+            name:
+              type: string
+              example: Luciene
+            email:
+              type: string
+              format: email
+              example: luciene@email.com
     AuthResponse:
       type: object
       properties:
