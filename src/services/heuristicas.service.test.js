@@ -41,6 +41,39 @@ describe("heuristicas.service createHeuristica", () => {
       id: "6814f42db637f17f43549a76",
       nome: "Menor custo",
       descricao: "Prioriza opcoes com menor custo total.",
+      status: "inativa",
+      createdAt,
+    });
+  });
+
+  it("returns not found when heuristic does not exist or is not accessible", async () => {
+    Heuristica.findOne.mockResolvedValue(null);
+
+    await expect(
+      heuristicasService.getHeuristicaById({
+        id: "6814f42db637f17f43549a76",
+        usuarioId: "507f1f77bcf86cd799439011",
+      })
+    ).rejects.toMatchObject({
+      status: 404,
+      message: heuristicasService.NOT_FOUND_MESSAGE,
+    });
+  });
+
+  it("returns not found for invalid ids", async () => {
+    jest.spyOn(mongoose.Types.ObjectId, "isValid").mockReturnValueOnce(false);
+
+    await expect(
+      heuristicasService.getHeuristicaById({
+        id: "123",
+        usuarioId: "507f1f77bcf86cd799439011",
+      })
+    ).rejects.toMatchObject({
+      status: 404,
+      message: heuristicasService.NOT_FOUND_MESSAGE,
+    });
+
+    expect(Heuristica.findOne).not.toHaveBeenCalled();
       status: "ativa",
       usuario: "507f1f77bcf86cd799439011",
     });

@@ -29,6 +29,22 @@ paths:
           description: Token válido
         "401":
           description: Token inválido ou ausente
+  /api/heuristicas/{id}:
+    get:
+      tags: [Heuristicas]
+      summary: Consultar heuristica por id
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          example: "6814f42db637f17f43549a76"
+      responses:
+        "200":
+          description: Heuristica encontrada
   /api/heuristicas:
     post:
       tags: [Heuristicas]
