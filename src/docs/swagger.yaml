@@ -49,7 +49,7 @@ paths:
   /api/auth/login:
     post:
       tags: [Auth]
-      summary: Autenticar usuário e retornar JWT
+      summary: Autenticar usuário ativo e retornar JWT com expiração
       requestBody:
         required: true
         content:
@@ -65,6 +65,8 @@ paths:
                 $ref: "#/components/schemas/AuthResponse"
         "401":
           description: Credenciais inválidas
+        "403":
+          description: Usuário não pode autenticar
 components:
   securitySchemes:
     bearerAuth:
@@ -105,6 +107,9 @@ components:
         token:
           type: string
           example: eyJhbGciOi...
+        expiresIn:
+          type: string
+          example: 1d
         user:
           type: object
           properties:
